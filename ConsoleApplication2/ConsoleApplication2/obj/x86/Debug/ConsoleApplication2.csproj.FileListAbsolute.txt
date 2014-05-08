@@ -1,0 +1,19 @@
+C:\Users\Gameblade\documents\visual studio 2010\Projects\ConsoleApplication2\ConsoleApplication2\bin\Debug\ConsoleApplication2.exe
+C:\Users\Gameblade\documents\visual studio 2010\Projects\ConsoleApplication2\ConsoleApplication2\bin\Debug\ConsoleApplication2.pdb
+C:\Users\Gameblade\documents\visual studio 2010\Projects\ConsoleApplication2\ConsoleApplication2\obj\x86\Debug\ResolveAssemblyReference.cache
+C:\Users\Gameblade\documents\visual studio 2010\Projects\ConsoleApplication2\ConsoleApplication2\obj\x86\Debug\ConsoleApplication2.exe
+C:\Users\Gameblade\documents\visual studio 2010\Projects\ConsoleApplication2\ConsoleApplication2\obj\x86\Debug\ConsoleApplication2.pdb
+D:\Android\Backup\Visual Studio 2010\Projects\ConsoleApplication2\ConsoleApplication2\obj\x86\Debug\ConsoleApplication2.exe
+D:\Android\Backup\Visual Studio 2010\Projects\ConsoleApplication2\ConsoleApplication2\obj\x86\Debug\ConsoleApplication2.pdb
+D:\Gameblade\Documents\Visual Studio\Visual Studio 2010\Projects\ConsoleApplication2\ConsoleApplication2\obj\x86\Debug\ConsoleApplication2.exe
+D:\Gameblade\Documents\Visual Studio\Visual Studio 2010\Projects\ConsoleApplication2\ConsoleApplication2\obj\x86\Debug\ConsoleApplication2.pdb
+D:\Gameblade\Documents\Visual Studio\Visual Studio 2010\Projects\ConsoleApplication2\ConsoleApplication2\bin\Debug\ConsoleApplication2.exe
+D:\Gameblade\Documents\Visual Studio\Visual Studio 2010\Projects\ConsoleApplication2\ConsoleApplication2\bin\Debug\ConsoleApplication2.pdb
+D:\Gameblade\Documents\Visual Studio\Visual Studio 2010\Projects\ConsoleApplication2\ConsoleApplication2\obj\x86\Debug\ConsoleApplication2.csprojResolveAssemblyReference.cache
+D:\Gameblade\Documents\School\INFDTM - Datamining\ConsoleApplication2\ConsoleApplication2\obj\x86\Debug\ConsoleApplication2.exe
+D:\Gameblade\Documents\School\INFDTM - Datamining\ConsoleApplication2\ConsoleApplication2\obj\x86\Debug\ConsoleApplication2.pdb
+C:\Users\Jeroen\Documents\School\INFDTM - Datamining\ConsoleApplication2\ConsoleApplication2\obj\x86\Debug\ConsoleApplication2.exe
+C:\Users\Jeroen\Documents\School\INFDTM - Datamining\ConsoleApplication2\ConsoleApplication2\obj\x86\Debug\ConsoleApplication2.pdb
+C:\Users\Jeroen\Documents\School\INFDTM - Datamining\ConsoleApplication2\ConsoleApplication2\bin\Debug\ConsoleApplication2.exe
+C:\Users\Jeroen\Documents\School\INFDTM - Datamining\ConsoleApplication2\ConsoleApplication2\bin\Debug\ConsoleApplication2.pdb
+C:\Users\Jeroen\Documents\School\INFDTM - Datamining\ConsoleApplication2\ConsoleApplication2\obj\x86\Debug\ConsoleApplication2.csprojResolveAssemblyReference.cache
