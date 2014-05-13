@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace ConsoleApplication2
+namespace Recommandation.System.Library
 {
-    class Preference
+    public class Preference
     {
         int userID;
         int[] itemID = new int[0];
