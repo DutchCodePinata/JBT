@@ -17,3 +17,5 @@ C:\Users\Jeroen\Documents\School\INFDTM - Datamining\ConsoleApplication2\Console
 C:\Users\Jeroen\Documents\School\INFDTM - Datamining\ConsoleApplication2\ConsoleApplication2\bin\Debug\ConsoleApplication2.exe
 C:\Users\Jeroen\Documents\School\INFDTM - Datamining\ConsoleApplication2\ConsoleApplication2\bin\Debug\ConsoleApplication2.pdb
 C:\Users\Jeroen\Documents\School\INFDTM - Datamining\ConsoleApplication2\ConsoleApplication2\obj\x86\Debug\ConsoleApplication2.csprojResolveAssemblyReference.cache
+C:\Users\Ben laptop\Documents\GitHub\JBT\ConsoleApplication2\ConsoleApplication2\obj\x86\Debug\ConsoleApplication2.exe
+C:\Users\Ben laptop\Documents\GitHub\JBT\ConsoleApplication2\ConsoleApplication2\obj\x86\Debug\ConsoleApplication2.pdb

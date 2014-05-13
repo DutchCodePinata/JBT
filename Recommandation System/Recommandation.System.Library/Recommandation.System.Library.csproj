@@ -40,8 +40,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Preference.cs" />
-    <Compile Include="RecommandationSystem.cs" />
-    <Compile Include="RecommandationSystemFactory.cs" />
+    <Compile Include="RecommendationSystem.cs" />
+    <Compile Include="RecommendationSystemFactory.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

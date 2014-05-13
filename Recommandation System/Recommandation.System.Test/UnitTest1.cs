@@ -7,10 +7,10 @@ namespace Recommandation.System.Test
     [TestClass]
     public class UnitTest1
     {
-        private RecommandationSystem recommandationSystem;
+        private RecommendationSystem recommandationSystem;
         public UnitTest1()
         {
-            recommandationSystem = new RecommandationSystem();            
+            recommandationSystem = new RecommendationSystem();            
         }
 
         [TestMethod]
