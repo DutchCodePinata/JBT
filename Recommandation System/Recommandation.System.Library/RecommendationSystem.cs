@@ -201,10 +201,17 @@ namespace Recommandation.System.Library
         {
             for (int i = 0; i < data.Length; ++i)
             {
-                if (indices) Console.Write(i.ToString().PadLeft(3) + " ");
+                if (indices)
+                {
+                    Console.Write(i.ToString().PadLeft(3) + " ");
+                }
+
                 for (int j = 0; j < data[i].Length; ++j)
                 {
-                    if (data[i][j] >= 0.0) Console.Write(" ");
+                    if (data[i][j] >= 0.0)
+                    {
+                        Console.Write(" ");
+                    }
                     Console.Write(data[i][j].ToString("F" + decimals) + " ");
                 }
                 Console.WriteLine("");
@@ -215,8 +222,13 @@ namespace Recommandation.System.Library
         void showVector(int[] vector, bool newLine)
         {
             for (int i = 0; i < vector.Length; ++i)
+            { 
                 Console.Write(vector[i] + " ");
-            if (newLine) Console.WriteLine("\n");
+            }
+            if (newLine)
+            {
+                Console.WriteLine("\n");
+            }
         }
 
         void showClustered(double[][] data, int[] clustering, int numClusters, int decimals)
