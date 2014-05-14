@@ -8,15 +8,15 @@ namespace Recommandation.System.Library
     public class RecommendationSystem
     {
         private double[][] data;
+        private const int clusterCount = 2;
 
         public RecommendationSystem()
         {
             getDataSet();
-            ShowData(data, 1, true, true);
-            int numClusters = 2;
-            int[] clustering = Cluster(data, numClusters);
-            ShowVector(clustering, true);
-            ShowClustered(data, clustering, numClusters, 1);
+            showData(data, 1, true, true);
+            int[] clustering = cluster(data, clusterCount);
+            showVector(clustering, true);
+            showClustered(data, clustering, clusterCount, 1);
         }
 
         public void getDataSet()
@@ -24,64 +24,57 @@ namespace Recommandation.System.Library
             data = new double[100][];
             for (int i = 0 ; i < data.Length ; i++)
             {
-                data[i] = new double[] { GetRandomNumber(50.0, 100.0), GetRandomNumber(100.0, 250.0) };
+                data[i] = new double[] { getRandomNumber(50.0, 100.0), getRandomNumber(100.0, 250.0) };
             }
         }
 
 
-        public int[] Cluster(double[][] data, int numClusters)
+        private int[] cluster(double[][] data, int numClusters)
         {
             bool changed = true; // was there a change in at least one cluster assignment?
             bool success = true; // were all means able to be computed? (no zero-count clusters)
 
-            int[] clustering = InitClustering(data.Length, numClusters, 0); // semi-random initialization
-            double[][] means = Allocate(numClusters, data[0].Length); // small convenience
+            int[] clustering = initClustering(data.Length, 0); // semi-random initialization
+            double[][] means = allocate(data[0].Length); // small convenience
 
             int maxCount = data.Length * 10; // sanity check
             int ct = 0;
             while (changed == true && success == true && ct < maxCount)
             {
                 ++ct; // k-means typically converges very quickly
-                success = UpdateMeans(data, clustering, means); 
-                changed = UpdateClustering(data, clustering, means);
+                success = updateMeans(data, clustering, means); 
+                changed = updateClustering(data, clustering, means);
             }
             
             return clustering;
         }
 
-        private int[] InitClustering(int numTuples, int numClusters, int randomSeed)
+        private int[] initClustering(int numTuples, int randomSeed)
         {
-            // init clustering semi-randomly (at least one tuple in each cluster)
-            // consider alternatives, especially k-means++ initialization,
-            // or instead of randomly assigning each tuple to a cluster, pick
-            // numClusters of the tuples as initial centroids/means then use
-            // those means to assign each tuple to an initial cluster.
             Random random = new Random(randomSeed);
             int[] clustering = new int[numTuples];
-            for (int i = 0; i < numClusters; ++i) // make sure each cluster has at least one tuple
+            for (int i = 0; i < clusterCount; ++i)
+            {
                 clustering[i] = i;
-            for (int i = numClusters; i < clustering.Length; ++i)
-                clustering[i] = random.Next(0, numClusters); // other assignments random
+            }
+            for (int i = clusterCount; i < clustering.Length; ++i)
+            {
+                clustering[i] = random.Next(0, clusterCount);
+            }
             return clustering;
         }
 
-        private double[][] Allocate(int numClusters, int numColumns)
+        private double[][] allocate(int numColumns)
         {
             // convenience matrix allocator for Cluster()
-            double[][] result = new double[numClusters][];
-            for (int k = 0; k < numClusters; ++k)
+            double[][] result = new double[clusterCount][];
+            for (int k = 0; k < clusterCount; ++k)
                 result[k] = new double[numColumns];
             return result;
         }
 
-        private bool UpdateMeans(double[][] data, int[] clustering, double[][] means)
+        private bool updateMeans(double[][] data, int[] clustering, double[][] means)
         {
-            // returns false if there is a cluster that has no tuples assigned to it
-            // parameter means[][] is really a ref parameter
-
-            // check existing cluster counts
-            // can omit this check if InitClustering and UpdateClustering
-            // both guarantee at least one tuple in each cluster (usually true)
             int numClusters = means.Length;
             int[] clusterCounts = new int[numClusters];
             for (int i = 0; i < data.Length; ++i)
@@ -91,34 +84,42 @@ namespace Recommandation.System.Library
             }
 
             for (int k = 0; k < numClusters; ++k)
+            {
                 if (clusterCounts[k] == 0)
-                    return false; // bad clustering. no change to means[][]
+                {
+                    return false;
+                }
+            }
 
-            // update, zero-out means so it can be used as scratch matrix 
             for (int k = 0; k < means.Length; ++k)
+            {
                 for (int j = 0; j < means[k].Length; ++j)
+                {
                     means[k][j] = 0.0;
+                }
+            }
 
             for (int i = 0; i < data.Length; ++i)
             {
                 int cluster = clustering[i];
                 for (int j = 0; j < data[i].Length; ++j)
-                    means[cluster][j] += data[i][j]; // accumulate sum
+                {
+                    means[cluster][j] += data[i][j];
+                }
             }
 
             for (int k = 0; k < means.Length; ++k)
+            {
                 for (int j = 0; j < means[k].Length; ++j)
-                    means[k][j] /= clusterCounts[k]; // danger of div by 0
+                {
+                    means[k][j] /= clusterCounts[k];
+                }
+            }
             return true;
         }
 
-        private bool UpdateClustering(double[][] data, int[] clustering, double[][] means)
+        private bool updateClustering(double[][] data, int[] clustering, double[][] means)
         {
-            // (re)assign each tuple to a cluster (closest mean)
-            // returns false if no tuple assignments change OR
-            // if the reassignment would result in a clustering where
-            // one or more clusters have no tuples.
-
             int numClusters = means.Length;
             bool changed = false;
 
@@ -130,9 +131,9 @@ namespace Recommandation.System.Library
             for (int i = 0; i < data.Length; ++i) // walk thru each tuple
             {
                 for (int k = 0; k < numClusters; ++k)
-                    distances[k] = Distance(data[i], means[k]); // compute distances from curr tuple to all k means
+                    distances[k] = distance(data[i], means[k]); // compute distances from curr tuple to all k means
 
-                int newClusterID = MinIndex(distances); // find closest mean ID
+                int newClusterID = minIndex(distances); // find closest mean ID
                 if (newClusterID != newClustering[i])
                 {
                     changed = true;
@@ -159,7 +160,7 @@ namespace Recommandation.System.Library
             return true; // good clustering and at least one change
         }
 
-        private double Distance(double[] tuple, double[] mean)
+        private double distance(double[] tuple, double[] mean)
         {
             // Euclidean distance between two vectors for UpdateClustering()
             // consider alternatives such as Manhattan distance
@@ -169,7 +170,7 @@ namespace Recommandation.System.Library
             return Math.Sqrt(sumSquaredDiffs);
         }
 
-        private int MinIndex(double[] distances)
+        private int minIndex(double[] distances)
         {
             // index of smallest value in array
             // helper for UpdateClustering()
@@ -186,7 +187,7 @@ namespace Recommandation.System.Library
             return indexOfMin;
         }
 
-        private double GetRandomNumber(double minimum, double maximum)
+        private double getRandomNumber(double minimum, double maximum)
         {
             Random random = new Random();
             return random.NextDouble() * (maximum - minimum) + minimum;
@@ -196,7 +197,7 @@ namespace Recommandation.System.Library
 
         // misc display helpers for demo
 
-        void ShowData(double[][] data, int decimals, bool indices, bool newLine)
+        void showData(double[][] data, int decimals, bool indices, bool newLine)
         {
             for (int i = 0; i < data.Length; ++i)
             {
@@ -211,14 +212,14 @@ namespace Recommandation.System.Library
             if (newLine) Console.WriteLine("");
         } // ShowData
 
-        void ShowVector(int[] vector, bool newLine)
+        void showVector(int[] vector, bool newLine)
         {
             for (int i = 0; i < vector.Length; ++i)
                 Console.Write(vector[i] + " ");
             if (newLine) Console.WriteLine("\n");
         }
 
-        void ShowClustered(double[][] data, int[] clustering, int numClusters, int decimals)
+        void showClustered(double[][] data, int[] clustering, int numClusters, int decimals)
         {
             for (int k = 0; k < numClusters; ++k)
             {
