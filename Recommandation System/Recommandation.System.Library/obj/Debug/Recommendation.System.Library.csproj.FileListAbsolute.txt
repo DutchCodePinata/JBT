@@ -1,0 +1,5 @@
+C:\Users\Ben laptop\Documents\GitHub\JBT\Recommandation System\Recommandation.System.Library\obj\Debug\Recommendation.System.Library.csprojResolveAssemblyReference.cache
+C:\Users\Ben laptop\Documents\GitHub\JBT\Recommandation System\Recommandation.System.Library\bin\Debug\Recommendation.System.Library.dll
+C:\Users\Ben laptop\Documents\GitHub\JBT\Recommandation System\Recommandation.System.Library\bin\Debug\Recommendation.System.Library.pdb
+C:\Users\Ben laptop\Documents\GitHub\JBT\Recommandation System\Recommandation.System.Library\obj\Debug\Recommendation.System.Library.dll
+C:\Users\Ben laptop\Documents\GitHub\JBT\Recommandation System\Recommandation.System.Library\obj\Debug\Recommendation.System.Library.pdb

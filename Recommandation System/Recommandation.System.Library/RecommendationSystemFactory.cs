@@ -8,7 +8,7 @@ namespace Recommandation.System.Library
 {
     public class RecommendationSystemFactory
     {
-        public static RecommendationSystem GetRecommandationSystem()
+        public static RecommendationSystem GetRecommendationSystem()
         {
             return new RecommendationSystem();
         }

@@ -14,7 +14,7 @@ namespace Recommandation.System.Console
         {
             try
             {
-                var recommandationSystem = RecommendationSystemFactory.GetRecommandationSystem();
+                var recommandationSystem = RecommendationSystemFactory.GetRecommendationSystem();
             }
             catch (Exception e)
             {

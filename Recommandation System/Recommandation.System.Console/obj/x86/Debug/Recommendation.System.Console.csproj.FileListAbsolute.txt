@@ -1,0 +1,8 @@
+C:\Users\Ben laptop\Documents\GitHub\JBT\Recommandation System\Recommandation.System.Console\bin\Debug\Recommendation.System.Console.exe.config
+C:\Users\Ben laptop\Documents\GitHub\JBT\Recommandation System\Recommandation.System.Console\bin\Debug\Recommendation.System.Console.exe
+C:\Users\Ben laptop\Documents\GitHub\JBT\Recommandation System\Recommandation.System.Console\bin\Debug\Recommendation.System.Console.pdb
+C:\Users\Ben laptop\Documents\GitHub\JBT\Recommandation System\Recommandation.System.Console\bin\Debug\Recommendation.System.Library.dll
+C:\Users\Ben laptop\Documents\GitHub\JBT\Recommandation System\Recommandation.System.Console\bin\Debug\Recommendation.System.Library.pdb
+C:\Users\Ben laptop\Documents\GitHub\JBT\Recommandation System\Recommandation.System.Console\obj\x86\Debug\Recommendation.System.Console.csprojResolveAssemblyReference.cache
+C:\Users\Ben laptop\Documents\GitHub\JBT\Recommandation System\Recommandation.System.Console\obj\x86\Debug\Recommendation.System.Console.exe
+C:\Users\Ben laptop\Documents\GitHub\JBT\Recommandation System\Recommandation.System.Console\obj\x86\Debug\Recommendation.System.Console.pdb

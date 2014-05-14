@@ -22,16 +22,16 @@ namespace Recommandation.System.Library
         public void getDataSet()
         {
             data = new double[20][];
-            data[0] = new double[] { 65.0, 220.0 };
-            data[1] = new double[] { 73.0, 160.0 };
-            data[2] = new double[] { 59.0, 110.0 };
-            data[3] = new double[] { 61.0, 120.0 };
-            data[4] = new double[] { 75.0, 150.0 };
-            data[5] = new double[] { 67.0, 240.0 };
-            data[6] = new double[] { 68.0, 230.0 };
-            data[7] = new double[] { 70.0, 220.0 };
-            data[8] = new double[] { 62.0, 130.0 };
-            data[9] = new double[] { 66.0, 210.0 };
+            data[0]  = new double[] { 65.0, 220.0 };
+            data[1]  = new double[] { 73.0, 160.0 };
+            data[2]  = new double[] { 59.0, 110.0 };
+            data[3]  = new double[] { 61.0, 120.0 };
+            data[4]  = new double[] { 75.0, 150.0 };
+            data[5]  = new double[] { 67.0, 240.0 };
+            data[6]  = new double[] { 68.0, 230.0 };
+            data[7]  = new double[] { 70.0, 220.0 };
+            data[8]  = new double[] { 62.0, 130.0 };
+            data[9]  = new double[] { 66.0, 210.0 };
             data[10] = new double[] { 77.0, 190.0 };
             data[11] = new double[] { 75.0, 180.0 };
             data[12] = new double[] { 74.0, 170.0 };
