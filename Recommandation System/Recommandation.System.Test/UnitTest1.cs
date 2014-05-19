@@ -1,8 +1,7 @@
-﻿using System;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Recommandation.System.Library;
 
-namespace Recommandation.System.Test
+namespace Test
 {
     [TestClass]
     public class UnitTest1

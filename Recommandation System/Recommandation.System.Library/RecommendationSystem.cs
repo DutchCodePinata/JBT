@@ -2,189 +2,61 @@
 using System.IO;
 using System.Collections.Generic;
 using System.Globalization;
+using Recommandation.System.Library;
 
-namespace Recommandation.System.Library
+namespace Recommendation.System.Library
 {
     public class RecommendationSystem
     {
-        private double[][] data;
-        private const int clusterCount = 2;
+        private Dictionary<int, Rating> ratings;
+        private Dictionary<int, Tag> tags;
+        private Dictionary<int, Movie> movies;
+
+        private List<int> productID;
 
         public RecommendationSystem()
         {
-            getDataSet();
-            showData(data, 1, true, true);
-            int[] clustering = cluster(data, clusterCount);
-            showVector(clustering, true);
-            showClustered(data, clustering, clusterCount, 1);
-        }
-
-        public void getDataSet()
-        {
-            data = new double[100][];
-            for (int i = 0 ; i < data.Length ; i++)
-            {
-                data[i] = new double[] { getRandomNumber(50.0, 100.0), getRandomNumber(100.0, 250.0) };
-            }
-        }
-
-
-        private int[] cluster(double[][] data, int numClusters)
-        {
-            bool changed = true; // was there a change in at least one cluster assignment?
-            bool success = true; // were all means able to be computed? (no zero-count clusters)
-
-            int[] clustering = initClustering(data.Length, 0); // semi-random initialization
-            double[][] means = allocate(data[0].Length); // small convenience
-
-            int maxCount = data.Length * 10; // sanity check
-            int ct = 0;
-            while (changed == true && success == true && ct < maxCount)
-            {
-                ++ct; // k-means typically converges very quickly
-                success = updateMeans(data, clustering, means); 
-                changed = updateClustering(data, clustering, means);
-            }
+            init();
             
-            return clustering;
+            getDataSets();
+            Add();
+            CreateAllPearson();
         }
 
-        private int[] initClustering(int numTuples, int randomSeed)
+        private void init()
         {
-            Random random = new Random(randomSeed);
-            int[] clustering = new int[numTuples];
-            for (int i = 0; i < clusterCount; ++i)
-            {
-                clustering[i] = i;
-            }
-            for (int i = clusterCount; i < clustering.Length; ++i)
-            {
-                clustering[i] = random.Next(0, clusterCount);
-            }
-            return clustering;
+            ratings = new Dictionary<int, Rating>();
+            tags = new Dictionary<int, Tag>();
+            movies = new Dictionary<int, Movie>();
+
+            productID = new List<int>();    
         }
 
-        private double[][] allocate(int numColumns)
+        private void getDataSets()
         {
-            // convenience matrix allocator for Cluster()
-            double[][] result = new double[clusterCount][];
-            for (int k = 0; k < clusterCount; ++k)
-                result[k] = new double[numColumns];
-            return result;
+            ratings = dataSet<Rating>("FILE LOCATION");
+            tags = dataSet<Tag>("FILE LOCATION");
+            movies = dataSet<Movie>("FILE LOCATION");
         }
 
-        private bool updateMeans(double[][] data, int[] clustering, double[][] means)
+        private Dictionary<int,TClass> dataSet<TClass>(string file) where TClass : Data, new()
         {
-            int numClusters = means.Length;
-            int[] clusterCounts = new int[numClusters];
-            for (int i = 0; i < data.Length; ++i)
+            Dictionary<int, TClass> dictionary = new Dictionary<int, TClass>();
+            StreamReader s = new StreamReader(file);
+
+            string allData = s.ReadToEnd();
+            string[] rows = allData.Split("\r\n".ToCharArray());
+            foreach (string row in rows)
             {
-                int cluster = clustering[i];
-                ++clusterCounts[cluster];
+                //Split the row at the delimiter.
+                string[] items = row.Split("::".ToCharArray());
+
+                //Add the item
+                dictionary.Add(
+                    int.Parse(items[0]),
+                    new TClass(){data = items});
             }
-
-            for (int k = 0; k < numClusters; ++k)
-            {
-                if (clusterCounts[k] == 0)
-                {
-                    return false;
-                }
-            }
-
-            for (int k = 0; k < means.Length; ++k)
-            {
-                for (int j = 0; j < means[k].Length; ++j)
-                {
-                    means[k][j] = 0.0;
-                }
-            }
-
-            for (int i = 0; i < data.Length; ++i)
-            {
-                int cluster = clustering[i];
-                for (int j = 0; j < data[i].Length; ++j)
-                {
-                    means[cluster][j] += data[i][j];
-                }
-            }
-
-            for (int k = 0; k < means.Length; ++k)
-            {
-                for (int j = 0; j < means[k].Length; ++j)
-                {
-                    means[k][j] /= clusterCounts[k];
-                }
-            }
-            return true;
-        }
-
-        private bool updateClustering(double[][] data, int[] clustering, double[][] means)
-        {
-            int numClusters = means.Length;
-            bool changed = false;
-
-            int[] newClustering = new int[clustering.Length]; // proposed result
-            Array.Copy(clustering, newClustering, clustering.Length);
-
-            double[] distances = new double[numClusters]; // distances from curr tuple to each mean
-
-            for (int i = 0; i < data.Length; ++i) // walk thru each tuple
-            {
-                for (int k = 0; k < numClusters; ++k)
-                    distances[k] = distance(data[i], means[k]); // compute distances from curr tuple to all k means
-
-                int newClusterID = minIndex(distances); // find closest mean ID
-                if (newClusterID != newClustering[i])
-                {
-                    changed = true;
-                    newClustering[i] = newClusterID; // update
-                }
-            }
-
-            if (changed == false)
-                return false; // no change so bail and don't update clustering[][]
-
-            // check proposed clustering[] cluster counts
-            int[] clusterCounts = new int[numClusters];
-            for (int i = 0; i < data.Length; ++i)
-            {
-                int cluster = newClustering[i];
-                ++clusterCounts[cluster];
-            }
-
-            for (int k = 0; k < numClusters; ++k)
-                if (clusterCounts[k] == 0)
-                    return false; // bad clustering. no change to clustering[][]
-
-            Array.Copy(newClustering, clustering, newClustering.Length); // update
-            return true; // good clustering and at least one change
-        }
-
-        private double distance(double[] tuple, double[] mean)
-        {
-            // Euclidean distance between two vectors for UpdateClustering()
-            // consider alternatives such as Manhattan distance
-            double sumSquaredDiffs = 0.0;
-            for (int j = 0; j < tuple.Length; ++j)
-                sumSquaredDiffs += Math.Pow((tuple[j] - mean[j]), 2);
-            return Math.Sqrt(sumSquaredDiffs);
-        }
-
-        private int minIndex(double[] distances)
-        {
-            // index of smallest value in array
-            // helper for UpdateClustering()
-            int indexOfMin = 0;
-            double smallDist = distances[0];
-            for (int k = 0; k < distances.Length; ++k)
-            {
-                if (distances[k] < smallDist)
-                {
-                    smallDist = distances[k];
-                    indexOfMin = k;
-                }
-            }
-            return indexOfMin;
+            return dictionary;
         }
 
         private double getRandomNumber(double minimum, double maximum)
@@ -193,63 +65,97 @@ namespace Recommandation.System.Library
             return random.NextDouble() * (maximum - minimum) + minimum;
         }
 
-        // ============================================================================
-
-        // misc display helpers for demo
-
-        void showData(double[][] data, int decimals, bool indices, bool newLine)
+        public void Add()
         {
-            for (int i = 0; i < data.Length; ++i)
+            CultureInfo ci = (CultureInfo)CultureInfo.CurrentCulture.Clone();
+            ci.NumberFormat.NumberDecimalSeparator = ".";
+            StreamReader myFile = new StreamReader("c:\\Users\\Gameblade\\Desktop\\testdata.txt");
+            string userString;
+            while ((userString = myFile.ReadLine()) != null)
             {
-                if (indices)
+                string[] userinfo = userString.Split(',');
+                if (!users.ContainsKey(int.Parse(userinfo[0])))
                 {
-                    Console.Write(i.ToString().PadLeft(3) + " ");
+                    users.Add(int.Parse(userinfo[0]), new Preference(int.Parse(userinfo[0])));
                 }
-
-                for (int j = 0; j < data[i].Length; ++j)
+                if (!productID.Contains(int.Parse(userinfo[1])))
                 {
-                    if (data[i][j] >= 0.0)
-                    {
-                        Console.Write(" ");
-                    }
-                    Console.Write(data[i][j].ToString("F" + decimals) + " ");
+                    productID.Add(int.Parse(userinfo[1]));
                 }
-                Console.WriteLine("");
+                Preference pref = users[int.Parse(userinfo[0])];
+                pref.Add(int.Parse(userinfo[1]), double.Parse(userinfo[2], ci));
             }
-            if (newLine) Console.WriteLine("");
-        } // ShowData
 
-        void showVector(int[] vector, bool newLine)
-        {
-            for (int i = 0; i < vector.Length; ++i)
-            { 
-                Console.Write(vector[i] + " ");
-            }
-            if (newLine)
-            {
-                Console.WriteLine("\n");
-            }
+
+            myFile.Close();
+
+            //Display the file contents.
+            Console.WriteLine("Userdata loaded");
+            //Suspend the screen.
+            Console.ReadLine();
         }
 
-        void showClustered(double[][] data, int[] clustering, int numClusters, int decimals)
+        public void CreateAllPearson()
         {
-            for (int k = 0; k < numClusters; ++k)
+            foreach (KeyValuePair<int, Preference> pref in users)
             {
-                Console.WriteLine("===================");
-                for (int i = 0; i < data.Length; ++i)
+                CreatePearson(pref.Value);
+            }
+            Console.ReadLine();
+        }
+
+        public void CreatePearson(Preference user)
+        {
+            double teller;
+            double noemerA;
+            double noemerB;
+            double pearson;
+            double fase1;
+            double fase2;
+            foreach (KeyValuePair<int, Preference> pref in users)
+            {
+                teller = 0;
+                noemerA = 0;
+                noemerB = 0;
+
+                if (user.getID() != pref.Key)
                 {
-                    int clusterID = clustering[i];
-                    if (clusterID != k) continue;
-                    Console.Write(i.ToString().PadLeft(3) + " ");
-                    for (int j = 0; j < data[i].Length; ++j)
+                    foreach (int ID in user.getItem())
                     {
-                        if (data[i][j] >= 0.0) Console.Write(" ");
-                        Console.Write(data[i][j].ToString("F" + decimals) + " ");
+                        if (Array.BinarySearch(pref.Value.getItem(), ID) >= 0)
+                        {
+                            fase1 = (user.getRating()[Array.BinarySearch(user.getItem(), ID)] - user.getAverageRating());
+                            fase2 = (pref.Value.getRating()[Array.BinarySearch(pref.Value.getItem(), ID)] - pref.Value.getAverageRating());
+                            teller += fase1 * fase2;
+                            noemerA += Math.Pow(user.getRating()[Array.BinarySearch(user.getItem(), ID)] - user.getAverageRating(), 2);
+                            noemerB += Math.Pow(pref.Value.getRating()[Array.BinarySearch(pref.Value.getItem(), ID)] - pref.Value.getAverageRating(), 2);
+                        }
                     }
-                    Console.WriteLine("");
+                    pearson = teller / Math.Sqrt(noemerA * noemerB);
+                    //Display the file contents.
+                    //Console.WriteLine(teller + " / " + Math.Sqrt(noemerA * noemerB));
+                    Console.WriteLine(user.getID() + " -> " + pref.Value.getID() + " | " + pearson);
+                    //Suspend the screen.
                 }
-                Console.WriteLine("===================");
-            } // k
+            }
+            Console.WriteLine();
+        }
+
+        public void GetInfo(Preference user)
+        {
+            //Console.WriteLine(user.getID());
+
+            int userid = user.getID();
+            int[] items = user.getItem();
+            double[] ratings = user.getRating();
+            int teller = 0;
+            foreach (int i in items)
+            {
+                Console.WriteLine(userid + " " + items[teller] + " " + ratings[teller]);
+                teller++;
+            }
+
+            Console.ReadLine();
         }
     }
 }
